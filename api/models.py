@@ -1,6 +1,5 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
-from django.contrib.postgres.fields import JSONField
 
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None):
@@ -29,4 +28,4 @@ class User(AbstractBaseUser):
 
 class Portfolio(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    portfolio = JSONField(default=list)
+    portfolio = models.JSONField(default=list)
