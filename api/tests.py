@@ -3,14 +3,17 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
 from api.models import User
-from rest_framework.authtoken.models import Token
 
 class APITests(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.user = User.objects.create_user(email='test@example.com', password='password123')
-        self.token = Token.objects.create(user=self.user)
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+
+        # Obtain JWT token
+        response = self.client.post(reverse('token_obtain_pair'), {'email': 'test@example.com', 'password': 'password123'}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.token = response.data['access']
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.token)
 
     def test_register(self):
         url = reverse('register')
@@ -22,14 +25,15 @@ class APITests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_login(self):
-        url = reverse('login')
+        url = reverse('token_obtain_pair')
         data = {
             'email': self.user.email,
             'password': 'password123',
         }
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIn('token', response.data)
+        self.assertIn('access', response.data)
+        self.assertIn('refresh', response.data)
 
     def test_buy_stock(self):
         url = reverse('buy_stock')
