@@ -1,4 +1,8 @@
 import os
+import environ
+
+env = environ.Env()
+environ.Env.read_env()
 
 INSTALLED_APPS = [
     'django.contrib.admin',
