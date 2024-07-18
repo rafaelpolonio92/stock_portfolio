@@ -98,7 +98,7 @@ AUTH_USER_MODEL = 'api.User'
 
 DEBUG = os.getenv('DEBUG') == 'True'
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'ec2-75-101-200-59.compute-1.amazonaws.com']
 
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'test')
 
