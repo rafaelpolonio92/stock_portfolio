@@ -1,5 +1,6 @@
 import os
 import environ
+from corsheaders.defaults import default_headers
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 env = environ.Env()
@@ -113,5 +114,9 @@ SIMPLE_JWT = {
 }
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3002",
+    "http://localhost:3002", "http://stockprojectrafael.s3-website-us-east-1.amazonaws.com"
+]
+
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    'Access-Control-Allow-Origin',
 ]
